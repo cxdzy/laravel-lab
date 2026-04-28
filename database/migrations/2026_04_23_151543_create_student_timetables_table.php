@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('student_timetables', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable(); // ✅ FIXED
             $table->unsignedInteger('subject_id')->nullable();
             $table->unsignedInteger('day_id')->nullable();
             $table->unsignedInteger('hall_id')->nullable();
