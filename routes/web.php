@@ -5,8 +5,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\HallController;
+use App\Http\Controllers\DayController;
+use App\Http\Controllers\LecturerGroupController;
+use App\Http\Controllers\StudentTimetableController;
 
 Route::resource('students', StudentController::class);
+Route::resource('subjects', SubjectController::class);
+Route::resource('halls', HallController::class);
+Route::resource('days', DayController::class);
+Route::resource('lecturer-groups', LecturerGroupController::class);
+Route::resource('timetables', StudentTimetableController::class);
 
 Route::get('/', fn () => view('login'));
 
