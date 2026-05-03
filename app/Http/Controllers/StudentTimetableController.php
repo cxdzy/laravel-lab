@@ -12,9 +12,31 @@ use Illuminate\Http\Request;
 
 class StudentTimetableController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $timetables = StudentTimetable::with(['user','subject','day','hall','lecturerGroup'])->get();
+        $timetables = StudentTimetable::with(['user', 'subject', 'day', 'hall', 'lecturerGroup'])
+            ->when($request->filled('user_name'), function ($query) use ($request) {
+                $name = trim($request->input('user_name'));
+                $query->whereHas('user', fn ($q) => $q->where('name', 'like', '%' . $name . '%'));
+            })
+            ->when($request->filled('subject_name'), function ($query) use ($request) {
+                $name = trim($request->input('subject_name'));
+                $query->whereHas('subject', fn ($q) => $q->where('subject_name', 'like', '%' . $name . '%'));
+            })
+            ->when($request->filled('day_name'), function ($query) use ($request) {
+                $name = trim($request->input('day_name'));
+                $query->whereHas('day', fn ($q) => $q->where('day_name', 'like', '%' . $name . '%'));
+            })
+            ->when($request->filled('hall_name'), function ($query) use ($request) {
+                $name = trim($request->input('hall_name'));
+                $query->whereHas('hall', fn ($q) => $q->where('lecture_hall_name', 'like', '%' . $name . '%'));
+            })
+            ->when($request->filled('group_name'), function ($query) use ($request) {
+                $name = trim($request->input('group_name'));
+                $query->whereHas('lecturerGroup', fn ($q) => $q->where('name', 'like', '%' . $name . '%'));
+            })
+            ->get();
+
         return view('timetables.index', compact('timetables'));
     }
 

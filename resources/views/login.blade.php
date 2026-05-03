@@ -3,137 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Modern UI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Login | Minimalist Management</title>
+    <!-- Modern Sans-Serif Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind to use the 'class' strategy for dark mode
+        window.tailwind.config = {
+            darkMode: 'class',
+        };
+
+        // Initialize theme on page load
+        (function() {
+            try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+        })();
+
+        // Function to toggle theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            try {
+                localStorage.theme = isDark ? 'dark' : 'light';
+            } catch (e) {}
+        }
+    </script>
     <style>
-        * { box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-
-        .login-card { 
-            width: 100%;
-            max-width: 400px; 
-            padding: 40px; 
-            background: rgba(255, 255, 255, 0.95); 
-            border-radius: 16px; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            text-align: center;
+        .btn-transition {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        h2 { 
-            margin-bottom: 8px; 
-            color: #333; 
-            font-weight: 600;
+        .input-focus {
+            transition: all 0.2s ease;
         }
-
-        p {
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 24px;
-        }
-
-        .error { 
-            background: #ffe5e5;
-            color: #d9534f; 
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-            border: 1px solid #f5c6cb;
-        }
-
-        .input-group {
-            text-align: left;
-            margin-bottom: 15px;
-        }
-
-        input { 
-            width: 100%; 
-            padding: 12px 16px; 
-            margin-top: 5px;
-            border: 1px solid #ddd; 
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        .input-focus:focus {
             outline: none;
+            border-color: #000;
+            box-shadow: 0 0 0 1px #000;
         }
-
-        input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            margin-top: 10px;
-            background: #667eea; 
-            color: white; 
-            border: none; 
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        button:hover { 
-            background: #5a67d8; 
-        }
-
-        .footer-links {
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        .footer-links a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer-links a:hover {
-            text-decoration: underline;
+        .dark .input-focus:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 1px #fff;
         }
     </style>
 </head>
-<body>
+<body class="antialiased bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen flex items-center justify-center p-4">
 
-<div class="login-card">
-    <h2>Welcome Back</h2>
-    <p>Please enter your details to sign in.</p>
-
-    @if(session('error'))
-        <div class="error">{{ session('error') }}</div>
-    @endif
-
-    <form method="POST" action="/login">
-        @csrf
-
-        <div class="input-group">
-            <input type="email" name="email" placeholder="Email Address" required>
+    <div class="w-full max-w-md">
+        <!-- Theme Toggle -->
+        <div class="flex justify-end mb-6">
+            <button onclick="toggleTheme()" class="p-2 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors focus:outline-none">
+                <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"></path></svg>
+                <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
 
-        <div class="input-group">
-            <input type="password" name="password" placeholder="Password" required>
+        <!-- Login Card -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl shadow-sm p-8 lg:p-12">
+            <header class="text-center mb-10">
+                <h1 class="text-3xl font-light tracking-tight text-gray-900 dark:text-white mb-2">Welcome Back</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Sign in to access your dashboard</p>
+            </header>
+
+            <!-- Error Handling -->
+            @if(session('error'))
+                <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-800/30 rounded-xl">
+                    <div class="flex items-center text-sm text-red-700 dark:text-red-400">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        {{ session('error') }}
+                    </div>
+                </div>
+            @endif
+
+            <form method="POST" action="/login" class="space-y-6">
+                @csrf
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Email Address</label>
+                    <input type="email" name="email" id="email" required placeholder="name@example.com"
+                           class="input-focus w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600">
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <label for="password" class="block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Password</label>
+                        <a href="/forgot-password" class="text-[10px] text-gray-400 hover:text-black dark:hover:text-white transition-colors uppercase tracking-widest font-bold">Forgot?</a>
+                    </div>
+                    <input type="password" name="password" id="password" required placeholder="••••••••"
+                           class="input-focus w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600">
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" 
+                            class="btn-transition w-full bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-black text-white py-4 rounded-xl font-medium text-sm shadow-lg shadow-black/5 dark:shadow-none">
+                        Sign In
+                    </button>
+                </div>
+            </form>
+
+            <footer class="mt-10 text-center">
+                <p class="text-xs text-gray-400 dark:text-gray-600 uppercase tracking-widest font-medium">
+                    New here? <a href="/register" class="text-black dark:text-white font-bold ml-1 hover:underline">Create Account</a>
+                </p>
+            </footer>
         </div>
-
-        <button type="submit">Sign In</button>
-    </form>
-
-    <div class="footer-links">
-        Don't have an account? <a href="/register">Create one</a>
+        
+        <p class="mt-8 text-center text-[10px] text-gray-400 dark:text-gray-600 uppercase tracking-widest font-bold">
+            &copy; {{ date('Y') }} Management System
+        </p>
     </div>
-</div>
 
 </body>
 </html>
