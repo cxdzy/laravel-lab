@@ -78,6 +78,16 @@
             </header>
 
             <!-- Error Handling -->
+            @if ($errors->any())
+                <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-800/30 rounded-xl">
+                    <ul class="list-disc list-inside text-sm text-red-700 dark:text-red-400 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @if(session('error'))
                 <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-800/30 rounded-xl">
                     <div class="flex items-center text-sm text-red-700 dark:text-red-400">
@@ -94,6 +104,7 @@
                 <div>
                     <label for="email" class="block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Email Address</label>
                     <input type="email" name="email" id="email" required placeholder="name@example.com"
+                           value="{{ old('email') }}"
                            class="input-focus w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600">
                 </div>
 

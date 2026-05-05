@@ -20,11 +20,11 @@ class DayController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'day_name' => 'required',
+        $validated = $request->validate([
+            'day_name' => 'required|string|max:50',
         ]);
 
-        Day::create($request->all());
+        Day::create($validated);
 
         return redirect()->route('days.index')
             ->with('success', 'Day created successfully!');
@@ -42,11 +42,11 @@ class DayController extends Controller
 
     public function update(Request $request, Day $day)
     {
-        $request->validate([
-            'day_name' => 'required',
+        $validated = $request->validate([
+            'day_name' => 'required|string|max:50',
         ]);
 
-        $day->update($request->all());
+        $day->update($validated);
 
         return redirect()->route('days.index')
             ->with('success', 'Day updated successfully!');

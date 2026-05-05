@@ -20,12 +20,12 @@ class HallController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'lecture_hall_name' => 'required',
-            'lecture_hall_place' => 'required',
+        $validated = $request->validate([
+            'lecture_hall_name' => 'required|string|max:100',
+            'lecture_hall_place' => 'required|string|max:100',
         ]);
 
-        Hall::create($request->all());
+        Hall::create($validated);
 
         return redirect()->route('halls.index')
             ->with('success', 'Hall created successfully!');
@@ -43,12 +43,12 @@ class HallController extends Controller
 
     public function update(Request $request, Hall $hall)
     {
-        $request->validate([
-            'lecture_hall_name' => 'required',
-            'lecture_hall_place' => 'required',
+        $validated = $request->validate([
+            'lecture_hall_name' => 'required|string|max:100',
+            'lecture_hall_place' => 'required|string|max:100',
         ]);
 
-        $hall->update($request->all());
+        $hall->update($validated);
 
         return redirect()->route('halls.index')
             ->with('success', 'Hall updated successfully!');

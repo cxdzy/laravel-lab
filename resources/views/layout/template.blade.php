@@ -76,7 +76,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <form action="/logout" method="POST" class="m-0">
+                    <form method="POST" action="{{ route('logout') }}" class="m-0">
                         @csrf
                         <button class="btn btn-outline-danger btn-sm border-0 fw-bold">
                             <i class="bi bi-box-arrow-right me-1"></i> Logout
@@ -89,7 +89,7 @@
 
     <aside class="app-sidebar bg-body shadow-sm">
         <div class="sidebar-brand">
-            <a href="{{ url('/dashboard') }}" class="brand-link">
+            <a href="{{ route('home') }}" class="brand-link">
                 <span class="brand-text fw-bold text-primary">MY<span class="text-body-emphasis">SYSTEM</span></span>
             </a>
         </div>
@@ -99,7 +99,7 @@
                 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
 
                     <li class="nav-item">
-                        <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('home') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
                             <i class="nav-icon bi bi-speedometer2"></i>
                             <p>Dashboard</p>
                         </a>

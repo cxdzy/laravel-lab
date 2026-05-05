@@ -31,11 +31,17 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="lecture_hall_name" class="form-label text-uppercase small text-body-secondary fw-semibold">Hall Name</label>
-                        <input type="text" name="lecture_hall_name" id="lecture_hall_name" class="form-control rounded-3 mm-input" required autofocus value="{{ old('lecture_hall_name') }}" placeholder="e.g., Main Hall">
+                        <input type="text" name="lecture_hall_name" id="lecture_hall_name" class="form-control rounded-3 mm-input @error('lecture_hall_name') is-invalid @enderror" required autofocus value="{{ old('lecture_hall_name') }}" placeholder="e.g., Main Hall">
+                        @error('lecture_hall_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="lecture_hall_place" class="form-label text-uppercase small text-body-secondary fw-semibold">Hall Place</label>
-                        <input type="text" name="lecture_hall_place" id="lecture_hall_place" class="form-control rounded-3 mm-input" required value="{{ old('lecture_hall_place') }}" placeholder="e.g., Building A">
+                        <input type="text" name="lecture_hall_place" id="lecture_hall_place" class="form-control rounded-3 mm-input @error('lecture_hall_place') is-invalid @enderror" required value="{{ old('lecture_hall_place') }}" placeholder="e.g., Building A">
+                        @error('lecture_hall_place')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>

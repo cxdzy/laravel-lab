@@ -11,32 +11,35 @@ use App\Http\Controllers\DayController;
 use App\Http\Controllers\LecturerGroupController;
 use App\Http\Controllers\StudentTimetableController;
 
+// Show login page first
 Route::get('/', fn () => view('login'));
 Route::get('/login', fn () => view('login'))->name('login');
 
+// Handle login
 Route::post('/login', function (Request $request) {
-
     $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
+        'email' => ['required', 'email'],
+        'password' => ['required'],
     ]);
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
-        return redirect('/dashboard');
+        return redirect()->route('home');
     }
 
-    return back()->with('error', 'Invalid login');
+    return back()->with('error', 'Invalid login')->withInput();
 });
 
-Route::get('/register', [RegisteredUserController::class, 'create']);
+// Register routes
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
+// Protected system routes
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    // Dashboard route
+    Route::get('/home', fn () => view('home'))->name('home');
 
+    // Resource routes
     Route::resource('students', StudentController::class);
     Route::resource('subjects', SubjectController::class);
     Route::resource('halls', HallController::class);
@@ -44,8 +47,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('lecturer-groups', LecturerGroupController::class);
     Route::resource('timetables', StudentTimetableController::class);
 
-    Route::post('/logout', function () {
+    // Logout
+    Route::post('/logout', function (Request $request) {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/');
-    });
+    })->name('logout');
 });

@@ -32,15 +32,24 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label for="subject_code" class="form-label text-uppercase small text-body-secondary fw-semibold">Subject Code</label>
-                        <input type="text" name="subject_code" id="subject_code" class="form-control rounded-3 mm-input" required value="{{ old('subject_code', $subject->subject_code) }}" placeholder="e.g., CS101">
+                        <input type="text" name="subject_code" id="subject_code" class="form-control rounded-3 mm-input @error('subject_code') is-invalid @enderror" required value="{{ old('subject_code', $subject->subject_code) }}" placeholder="e.g., CS101">
+                        @error('subject_code')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-8">
                         <label for="subject_name" class="form-label text-uppercase small text-body-secondary fw-semibold">Subject Name</label>
-                        <input type="text" name="subject_name" id="subject_name" class="form-control rounded-3 mm-input" required value="{{ old('subject_name', $subject->subject_name) }}" placeholder="e.g., Data Structures">
+                        <input type="text" name="subject_name" id="subject_name" class="form-control rounded-3 mm-input @error('subject_name') is-invalid @enderror" required value="{{ old('subject_name', $subject->subject_name) }}" placeholder="e.g., Data Structures">
+                        @error('subject_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-12">
                         <label for="lecturer_name" class="form-label text-uppercase small text-body-secondary fw-semibold">Lecturer Name (optional)</label>
-                        <input type="text" name="lecturer_name" id="lecturer_name" class="form-control rounded-3 mm-input" value="{{ old('lecturer_name', $subject->lecturer_name) }}" placeholder="Optional">
+                        <input type="text" name="lecturer_name" id="lecturer_name" class="form-control rounded-3 mm-input @error('lecturer_name') is-invalid @enderror" value="{{ old('lecturer_name', $subject->lecturer_name) }}" placeholder="Optional">
+                        @error('lecturer_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>

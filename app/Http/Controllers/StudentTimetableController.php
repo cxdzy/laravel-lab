@@ -53,18 +53,52 @@ class StudentTimetableController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required',
-            'subject_id' => 'required',
-            'day_id' => 'required',
-            'hall_id' => 'required',
-            'lecturer_group_id' => 'required',
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'day_id' => 'required|exists:days,id',
+            'hall_id' => 'required|exists:halls,id',
+            'lecturer_group_id' => 'nullable|exists:lecturer_groups,id',
+            'time_from' => 'required|date_format:H:i',
+            'time_to' => 'required|date_format:H:i|after:time_from',
         ]);
 
-        StudentTimetable::create($request->all());
+        $duplicateQuery = StudentTimetable::query()
+            ->where('user_id', $validated['user_id'])
+            ->where('subject_id', $validated['subject_id'])
+            ->where('day_id', $validated['day_id'])
+            ->where('hall_id', $validated['hall_id'])
+            ->where('time_from', $validated['time_from'])
+            ->where('time_to', $validated['time_to']);
 
-        return redirect()->route('timetables.index')
-            ->with('success', 'Timetable created!');
+        if (!empty($validated['lecturer_group_id'])) {
+            $duplicateQuery->where('lecturer_group_id', $validated['lecturer_group_id']);
+        } else {
+            $duplicateQuery->whereNull('lecturer_group_id');
+        }
+
+        if ($duplicateQuery->exists()) {
+            return back()
+                ->with('error', 'This timetable entry already exists.')
+                ->withInput();
+        }
+
+        $conflict = StudentTimetable::query()
+            ->where('hall_id', $validated['hall_id'])
+            ->where('day_id', $validated['day_id'])
+            ->where('time_from', '<', $validated['time_to'])
+            ->where('time_to', '>', $validated['time_from'])
+            ->exists();
+
+        if ($conflict) {
+            return back()
+                ->with('error', 'This hall is already booked at the selected time.')
+                ->withInput();
+        }
+
+        StudentTimetable::create($validated);
+
+        return redirect()->route('timetables.index')->with('success', 'Timetable entry created.');
     }
 
     public function show(StudentTimetable $timetable)
@@ -88,10 +122,54 @@ class StudentTimetableController extends Controller
 
     public function update(Request $request, StudentTimetable $timetable)
     {
-        $timetable->update($request->all());
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'day_id' => 'required|exists:days,id',
+            'hall_id' => 'required|exists:halls,id',
+            'lecturer_group_id' => 'nullable|exists:lecturer_groups,id',
+            'time_from' => 'required|date_format:H:i',
+            'time_to' => 'required|date_format:H:i|after:time_from',
+        ]);
 
-        return redirect()->route('timetables.index')
-            ->with('success', 'Updated!');
+        $duplicateQuery = StudentTimetable::query()
+            ->whereKeyNot($timetable->id)
+            ->where('user_id', $validated['user_id'])
+            ->where('subject_id', $validated['subject_id'])
+            ->where('day_id', $validated['day_id'])
+            ->where('hall_id', $validated['hall_id'])
+            ->where('time_from', $validated['time_from'])
+            ->where('time_to', $validated['time_to']);
+
+        if (!empty($validated['lecturer_group_id'])) {
+            $duplicateQuery->where('lecturer_group_id', $validated['lecturer_group_id']);
+        } else {
+            $duplicateQuery->whereNull('lecturer_group_id');
+        }
+
+        if ($duplicateQuery->exists()) {
+            return back()
+                ->with('error', 'This timetable entry already exists.')
+                ->withInput();
+        }
+
+        $conflict = StudentTimetable::query()
+            ->whereKeyNot($timetable->id)
+            ->where('hall_id', $validated['hall_id'])
+            ->where('day_id', $validated['day_id'])
+            ->where('time_from', '<', $validated['time_to'])
+            ->where('time_to', '>', $validated['time_from'])
+            ->exists();
+
+        if ($conflict) {
+            return back()
+                ->with('error', 'This hall is already booked at the selected time.')
+                ->withInput();
+        }
+
+        $timetable->update($validated);
+
+        return redirect()->route('timetables.index')->with('success', 'Timetable entry updated.');
     }
 
     public function destroy(StudentTimetable $timetable)

@@ -32,7 +32,10 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="day_name" class="form-label text-uppercase small text-body-secondary fw-semibold">Day Name</label>
-                        <input type="text" name="day_name" id="day_name" class="form-control rounded-3 mm-input" required value="{{ old('day_name', $day->day_name) }}" placeholder="e.g., Monday">
+                        <input type="text" name="day_name" id="day_name" class="form-control rounded-3 mm-input @error('day_name') is-invalid @enderror" required value="{{ old('day_name', $day->day_name) }}" placeholder="e.g., Monday">
+                        @error('day_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>

@@ -24,20 +24,20 @@ class StudentController extends Controller
     // Store a newly created student
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'phone_number' => 'nullable',
-            'address' => 'nullable',
-            'password' => 'required|confirmed',
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:255|unique:users,email',
+            'phone_number' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'password' => 'required|string|confirmed',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address,
-            'password' => Hash::make($request->password), // ✅ better
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'password' => Hash::make($validated['password']),
         ]);
 
         return redirect()->route('students.index')
@@ -59,19 +59,19 @@ class StudentController extends Controller
     // Update student
     public function update(Request $request, User $student)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $student->id,
-            'phone_number' => 'nullable',
-            'address' => 'nullable',
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:255|unique:users,email,' . $student->id,
+            'phone_number' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
         ]);
 
         // ✅ safer update (DON’T use $request->all())
         $student->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'] ?? null,
+            'address' => $validated['address'] ?? null,
         ]);
 
         return redirect()->route('students.index')

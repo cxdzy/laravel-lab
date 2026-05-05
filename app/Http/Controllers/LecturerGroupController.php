@@ -20,12 +20,12 @@ class LecturerGroupController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'part' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'part' => 'required|string|max:50',
         ]);
 
-        LecturerGroup::create($request->all());
+        LecturerGroup::create($validated);
 
         return redirect()->route('lecturer-groups.index')
             ->with('success', 'Group created successfully!');
@@ -43,12 +43,12 @@ class LecturerGroupController extends Controller
 
     public function update(Request $request, LecturerGroup $lecturer_group)
     {
-        $request->validate([
-            'name' => 'required',
-            'part' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'part' => 'required|string|max:50',
         ]);
 
-        $lecturer_group->update($request->all());
+        $lecturer_group->update($validated);
 
         return redirect()->route('lecturer-groups.index')
             ->with('success', 'Group updated successfully!');

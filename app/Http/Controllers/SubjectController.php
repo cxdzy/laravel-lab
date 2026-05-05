@@ -20,16 +20,19 @@ class SubjectController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'subject_code' => 'required',
-            'subject_name' => 'required',
-            'lecturer_name' => 'nullable',
+        $validated = $request->validate([
+            'subject_code' => 'required|string|max:10|unique:subjects,subject_code',
+            'subject_name' => 'required|string|max:100',
+            'lecturer_name' => 'nullable|string|max:100',
+        ], [
+            'subject_code.required' => 'The subject code is required.',
+            'subject_code.unique' => 'This subject code already exists.',
+            'subject_name.required' => 'The subject name is required.',
         ]);
 
-        Subject::create($request->all());
+        Subject::create($validated);
 
-        return redirect()->route('subjects.index')
-            ->with('success', 'Subject created successfully!');
+        return redirect()->route('subjects.index')->with('success', 'Subject created.');
     }
 
     public function show(Subject $subject)
@@ -44,16 +47,15 @@ class SubjectController extends Controller
 
     public function update(Request $request, Subject $subject)
     {
-        $request->validate([
-            'subject_code' => 'required',
-            'subject_name' => 'required',
-            'lecturer_name' => 'nullable',
+        $validated = $request->validate([
+            'subject_code' => 'required|string|max:10|unique:subjects,subject_code,' . $subject->id,
+            'subject_name' => 'required|string|max:100',
+            'lecturer_name' => 'nullable|string|max:100',
         ]);
 
-        $subject->update($request->all());
+        $subject->update($validated);
 
-        return redirect()->route('subjects.index')
-            ->with('success', 'Subject updated successfully!');
+        return redirect()->route('subjects.index')->with('success', 'Subject updated.');
     }
 
     public function destroy(Subject $subject)

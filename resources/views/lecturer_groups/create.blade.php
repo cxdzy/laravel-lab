@@ -31,11 +31,17 @@
                 <div class="row g-3">
                     <div class="col-md-8">
                         <label for="name" class="form-label text-uppercase small text-body-secondary fw-semibold">Group Name</label>
-                        <input type="text" name="name" id="name" class="form-control rounded-3 mm-input" required autofocus value="{{ old('name') }}" placeholder="e.g., Group A">
+                        <input type="text" name="name" id="name" class="form-control rounded-3 mm-input @error('name') is-invalid @enderror" required autofocus value="{{ old('name') }}" placeholder="e.g., Group A">
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4">
                         <label for="part" class="form-label text-uppercase small text-body-secondary fw-semibold">Part / Division</label>
-                        <input type="text" name="part" id="part" class="form-control rounded-3 mm-input" required value="{{ old('part') }}" placeholder="e.g., 1">
+                        <input type="text" name="part" id="part" class="form-control rounded-3 mm-input @error('part') is-invalid @enderror" required value="{{ old('part') }}" placeholder="e.g., 1">
+                        @error('part')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>
