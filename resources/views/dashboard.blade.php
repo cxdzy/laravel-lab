@@ -5,7 +5,7 @@
 @section('page_title', 'Dashboard')
 
 @section('content')
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body">
@@ -16,9 +16,9 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row g-3">
         <div class="col-md-4 col-sm-6 col-12">
-            <a class="text-decoration-none" href="{{ route('timetables.index') }}">
+            <a class="text-decoration-none d-block" href="{{ route('timetables.index') }}">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="rounded-3 bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
@@ -35,7 +35,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6 col-12">
-            <a class="text-decoration-none" href="{{ route('students.index') }}">
+            <a class="text-decoration-none d-block" href="{{ route('students.index') }}">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="rounded-3 bg-info-subtle text-info d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
@@ -52,7 +52,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6 col-12">
-            <a class="text-decoration-none" href="{{ route('subjects.index') }}">
+            <a class="text-decoration-none d-block" href="{{ route('subjects.index') }}">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="rounded-3 bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
@@ -69,7 +69,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6 col-12">
-            <a class="text-decoration-none" href="{{ route('halls.index') }}">
+            <a class="text-decoration-none d-block" href="{{ route('halls.index') }}">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="rounded-3 bg-warning-subtle text-warning d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
@@ -86,7 +86,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6 col-12">
-            <a class="text-decoration-none" href="{{ route('days.index') }}">
+            <a class="text-decoration-none d-block" href="{{ route('days.index') }}">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="rounded-3 bg-secondary-subtle text-secondary d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
@@ -103,7 +103,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6 col-12">
-            <a class="text-decoration-none" href="{{ route('lecturer-groups.index') }}">
+            <a class="text-decoration-none d-block" href="{{ route('lecturer-groups.index') }}">
                 <div class="card border-0 shadow-sm rounded-3 h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="rounded-3 bg-danger-subtle text-danger d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">

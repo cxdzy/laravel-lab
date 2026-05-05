@@ -33,11 +33,16 @@
         /* Minimalist tweaks */
         .app-header { border-bottom: 1px solid var(--bs-border-color); }
         .app-sidebar { border-right: 1px solid var(--bs-border-color); }
-        
-        /* Smooth Sidebar Transitions */
-        .nav-link { 
-            border-radius: 8px; 
-            margin: 2px 10px; 
+
+        /* Sidebar spacing + active highlight alignment */
+        .app-sidebar .sidebar-wrapper nav {
+            padding: 0 .5rem 1rem;
+        }
+
+        /* Smooth Sidebar Transitions (scope to sidebar only) */
+        .app-sidebar .sidebar-menu .nav-link {
+            border-radius: 8px;
+            margin: 2px 0;
             transition: all 0.2s ease;
         }
         
@@ -87,7 +92,7 @@
         </div>
     </nav>
 
-    <aside class="app-sidebar bg-body shadow-sm">
+    <aside class="app-sidebar bg-body shadow-none">
         <div class="sidebar-brand">
             <a href="{{ route('home') }}" class="brand-link">
                 <span class="brand-text fw-bold text-primary">MY<span class="text-body-emphasis">SYSTEM</span></span>
@@ -105,7 +110,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-header text-uppercase small opacity-50 px-3 mt-2">Management</li>
+                    <li class="nav-header text-uppercase small opacity-50 mt-2">Management</li>
 
                     <li class="nav-item">
                         <a href="{{ route('students.index') }}" class="nav-link {{ request()->is('students*') ? 'active' : '' }}">
