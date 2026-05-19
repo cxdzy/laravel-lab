@@ -64,6 +64,7 @@
                     <div class="col-md-6">
                         <label for="password" class="form-label text-uppercase small text-body-secondary fw-semibold">Password</label>
                         <input type="password" name="password" id="password" class="form-control rounded-3 mm-input @error('password') is-invalid @enderror" required>
+                        <div class="form-text">Minimum 8 characters, with at least one number and one symbol.</div>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

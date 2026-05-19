@@ -43,7 +43,7 @@ class StudentTimetableController extends Controller
     public function create()
     {
         return view('timetables.create', [
-            'users' => User::all(),
+            'users' => User::query()->where('role', 'student')->orderBy('name')->get(),
             'subjects' => Subject::all(),
             'days' => Day::all(),
             'halls' => Hall::all(),
@@ -112,7 +112,7 @@ class StudentTimetableController extends Controller
     {
         return view('timetables.edit', [
             'timetable' => $timetable,
-            'users' => User::all(),
+            'users' => User::query()->where('role', 'student')->orderBy('name')->get(),
             'subjects' => Subject::all(),
             'days' => Day::all(),
             'halls' => Hall::all(),

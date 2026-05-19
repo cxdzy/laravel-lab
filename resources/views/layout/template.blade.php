@@ -63,6 +63,18 @@
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 <div class="app-wrapper">
 
+    @php
+        $role = auth()->user()->role ?? 'student';
+        $dashboardRoute = match ($role) {
+            'admin' => route('home'),
+            'lecturer' => route('lecturer.dashboard'),
+            default => route('student.dashboard'),
+        };
+        $dashboardActive = ($role === 'admin' && request()->is('home'))
+            || ($role === 'student' && request()->is('student'))
+            || ($role === 'lecturer' && request()->is('lecturer'));
+    @endphp
+
     <nav class="app-header navbar navbar-expand bg-body shadow-sm">
         <div class="container-fluid">
             <ul class="navbar-nav">
@@ -80,6 +92,12 @@
                     </button>
                 </li>
 
+                <li class="nav-item px-2 d-flex align-items-center">
+                    <span class="small fw-semibold text-body-emphasis" style="display: inline-flex; align-items: center;">
+                        {{ auth()->user()->name }}
+                    </span>
+                </li>
+
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}" class="m-0">
                         @csrf
@@ -94,7 +112,7 @@
 
     <aside class="app-sidebar bg-body shadow-none">
         <div class="sidebar-brand">
-            <a href="{{ route('home') }}" class="brand-link">
+            <a href="{{ $dashboardRoute }}" class="brand-link">
                 <span class="brand-text fw-bold text-primary">MY<span class="text-body-emphasis">SYSTEM</span></span>
             </a>
         </div>
@@ -104,55 +122,89 @@
                 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
 
                     <li class="nav-item">
-                        <a href="{{ route('home') }}" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
+                        <a href="{{ $dashboardRoute }}" class="nav-link {{ $dashboardActive ? 'active' : '' }}">
                             <i class="nav-icon bi bi-speedometer2"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
 
-                    <li class="nav-header text-uppercase small opacity-50 mt-2">Management</li>
+                    @if ($role === 'admin')
+                        <li class="nav-header text-uppercase small opacity-50 mt-2">Management</li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('students.index') }}" class="nav-link {{ request()->is('students*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-people"></i>
-                            <p>Students</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('students.index') }}" class="nav-link {{ request()->is('students*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-people"></i>
+                                <p>Students</p>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->is('subjects*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-book"></i>
-                            <p>Subjects</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('subjects.index') }}" class="nav-link {{ request()->is('subjects*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-book"></i>
+                                <p>Subjects</p>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('halls.index') }}" class="nav-link {{ request()->is('halls*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-building"></i>
-                            <p>Halls</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('halls.index') }}" class="nav-link {{ request()->is('halls*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-building"></i>
+                                <p>Halls</p>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('days.index') }}" class="nav-link {{ request()->is('days*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-calendar3"></i>
-                            <p>Days</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('days.index') }}" class="nav-link {{ request()->is('days*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-calendar3"></i>
+                                <p>Days</p>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('lecturer-groups.index') }}" class="nav-link {{ request()->is('lecturer-groups*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-person-badge"></i>
-                            <p>Lecturer Groups</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('lecturer-groups.index') }}" class="nav-link {{ request()->is('lecturer-groups*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-person-badge"></i>
+                                <p>Lecturer Groups</p>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('timetables.index') }}" class="nav-link {{ request()->is('timetables*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-grid-3x3"></i>
-                            <p>Timetables</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('timetables.index') }}" class="nav-link {{ request()->is('timetables*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-grid-3x3"></i>
+                                <p>Timetables</p>
+                            </a>
+                        </li>
+                    @elseif ($role === 'lecturer')
+                        <li class="nav-header text-uppercase small opacity-50 mt-2">Classes</li>
+                        <li class="nav-item">
+                            <a href="{{ route('lecturer.dashboard') }}" class="nav-link {{ request()->is('lecturer') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-table"></i>
+                                <p>My Classes</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-header text-uppercase small opacity-50 mt-2">Account</li>
+                        <li class="nav-item">
+                            <a href="{{ route('lecturer.settings.edit') }}" class="nav-link {{ request()->is('lecturer/settings') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-gear"></i>
+                                <p>Settings</p>
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-header text-uppercase small opacity-50 mt-2">Timetable</li>
+                        <li class="nav-item">
+                            <a href="{{ route('student.dashboard') }}" class="nav-link {{ request()->is('student') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-table"></i>
+                                <p>My Timetable</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-header text-uppercase small opacity-50 mt-2">Account</li>
+                        <li class="nav-item">
+                            <a href="{{ route('student.settings.edit') }}" class="nav-link {{ request()->is('student/settings') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-gear"></i>
+                                <p>Settings</p>
+                            </a>
+                        </li>
+                    @endif
 
                 </ul>
             </nav>
@@ -177,7 +229,7 @@
     </main>
 
     <footer class="app-footer text-center small text-muted py-3">
-        <strong>&copy; {{ date('Y') }}</strong> Minimalist Admin.
+        <strong>&copy; {{ date('Y') }}</strong> Timetable Management.
     </footer>
 </div>
 

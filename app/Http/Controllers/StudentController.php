@@ -11,7 +11,10 @@ class StudentController extends Controller
     // Display a list of all students
     public function index()
     {
-        $students = User::all();
+        $students = User::query()
+            ->where('role', 'student')
+            ->orderBy('name')
+            ->get();
         return view('students.index', compact('students'));
     }
 
@@ -29,12 +32,20 @@ class StudentController extends Controller
             'email' => 'required|email|max:255|unique:users,email',
             'phone_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
-            'password' => 'required|string|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                'min:8',
+                'regex:/[0-9]/',
+                'regex:/[^A-Za-z0-9]/',
+            ],
         ]);
 
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'role' => 'student',
             'phone_number' => $validated['phone_number'] ?? null,
             'address' => $validated['address'] ?? null,
             'password' => Hash::make($validated['password']),
@@ -47,18 +58,21 @@ class StudentController extends Controller
     // Show student details
     public function show(User $student)
     {
+        abort_if(($student->role ?? 'student') !== 'student', 404);
         return view('students.show', compact('student'));
     }
 
     // Show edit form
     public function edit(User $student)
     {
+        abort_if(($student->role ?? 'student') !== 'student', 404);
         return view('students.edit', compact('student'));
     }
 
     // Update student
     public function update(Request $request, User $student)
     {
+        abort_if(($student->role ?? 'student') !== 'student', 404);
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:255|unique:users,email,' . $student->id,
@@ -81,6 +95,7 @@ class StudentController extends Controller
     // Delete student
     public function destroy(User $student)
     {
+        abort_if(($student->role ?? 'student') !== 'student', 404);
         $student->delete();
 
         return redirect()->route('students.index')

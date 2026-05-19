@@ -11,4 +11,9 @@ class Subject extends Model
         'subject_name',
         'lecturer_name',
     ];
+
+    public function timetables()
+    {
+        return $this->hasMany(StudentTimetable::class);
+    }
 }

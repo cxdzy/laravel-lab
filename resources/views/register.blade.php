@@ -106,11 +106,22 @@
                                class="input-focus w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600">
                     </div>
 
+                    <!-- Account Type -->
+                    <div class="md:col-span-2">
+                        <label for="role" class="block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Account Type</label>
+                        <select name="role" id="role" required
+                                class="input-focus w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200">
+                            <option value="student" {{ old('role', 'student') === 'student' ? 'selected' : '' }}>Student</option>
+                            <option value="lecturer" {{ old('role') === 'lecturer' ? 'selected' : '' }}>Lecturer</option>
+                        </select>
+                    </div>
+
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Password</label>
                         <input type="password" name="password" id="password" required placeholder="••••••••"
                                class="input-focus w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600">
+                        <p class="mt-2 text-[11px] text-gray-400 dark:text-gray-500">Minimum 8 characters, with at least one number and one symbol.</p>
                     </div>
 
                     <!-- Password Confirmation -->

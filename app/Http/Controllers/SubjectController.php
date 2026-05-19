@@ -9,7 +9,9 @@ class SubjectController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::all();
+        $subjects = Subject::query()
+            ->withCount('timetables')
+            ->get();
         return view('subjects.index', compact('subjects'));
     }
 
